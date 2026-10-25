@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<style>
+body{margin:0;background:#111;color:white;font-family:monospace;text-align:center}
+#menu{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#000;padding:30px;border-radius:20px;border:2px solid #00ff88}
+button{padding:14px;width:200px;margin:6px;border-radius:10px;border:none;font-weight:bold;font-size:16px}
+input{padding:12px;width:200px;border-radius:10px;border:none;text-align:center;font-size:20px;letter-spacing:5px}
+</style>
+</head>
+<body>
+<div id="menu">
+<h2 style="color:#00ff88">7THS REGIMENT</h2>
+<button onclick="createRoom()" style="background:#00ff88">CREATE ROOM</button><br>
+<input id="roomInput" placeholder="CODE"><br>
+<button onclick="joinRoom()" style="background:#00aaff;color:white">JOIN ROOM</button>
+<h1 id="status" style="margin-top:20px"></h1>
+</div>
+<script>
+var db; firebase.initializeApp({databaseURL:"https://the-7ths-stickman-regiment-default-rtdb.asia-southeast1.firebasedatabase.app/"}); db=firebase.database();
+var roomCode, myId="P"+Math.floor(Math.random()*999);
+
+function createRoom(){
+  roomCode=Math.floor(100000+Math.random()*900000).toString();
+  document.getElementById("status").innerHTML = `Tumhara Code:<br><span style="font-size:40px;color:#00ff88">${roomCode}</span><br><small style="font-size:14px;color:#aaa">Dost ko call pe ye code bolo</small>`;
+  db.ref("rooms/"+roomCode+"/players/"+myId).set({x:100});
+}
+function joinRoom(){
+  roomCode=document.getElementById("roomInput").value;
+  if(!roomCode) return alert("Code daalo");
+  document.getElementById("status").innerText="Room Joined: "+roomCode;
+  db.ref("rooms/"+roomCode+"/players/"+myId).set({x:100});
+}
+</script>
+</body>
+</html>
